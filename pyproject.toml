@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "worm_to_ebook"
+version = "0.1.0"
+description = ""
+authors = ["icb <ian.cody.burnet@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+beautifulsoup4 = "^4.9.1"
+requests = "^2.24.0"
+requests-futures = "^1.0.0"
+flake8 = "^3.8.3"
+lxml = "^4.5.2"
+ebooklib = "^0.17.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+flake8 = "^3.8.3"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
