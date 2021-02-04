@@ -9,11 +9,11 @@ import re
 CONTENTS = 'https://parahumans.wordpress.com/table-of-contents/'
 
 
-gethtml
-getshittywordpresscontents
-parseshittywordpressedhtml
-makeepubcontents
-makeepubchapter
+# gethtml
+# getshittywordpresscontents
+# parseshittywordpressedhtml
+# makeepubcontents
+# makeepubchapter
 
 def get_worm_html(url):
     '''
@@ -36,25 +36,35 @@ def parse_worm_contents(contentsHtml):
 
     all chapters at in 1.01 or 1.x format, except epilogue and sequel teaser
     '''
-    # actually should get the Arc title as well, 
+    # actually should get the Arc title as well,
     # then maybe just use tha tas the key to a dict with value list of chapters
 
     # get main contents html
     soup = BeautifulSoup(contentsHtml, 'lxml')
-    parent = soup.find('div', 'entry-content')
+    entrycontent = soup.find('div', 'entry-content')
 
     # Arc title regex. _usually_ <p><strong>Arc <\br>
 
     # so now.... Find arc title, find all chapterUrls until next Arc title.
     # i don't think they're actualy child tags, just mostly sort of sequential,
     # but not actually necessarilly in proper order
-    
-    # i might be able to find the arc title. use next_element until i get first 
+
+    # i might be able to find the arc title. use next_element until i get first
     # <a href>, save that link, then continue harvesting until I don't match
     # then finally "reset" to next index from chapter title match, and repeat
-    #soup.find('div','entry-content').find_all(string=re.compile('Arc \d+:.+'))[0].next_element.next_element.next_element.next_element
-    arctitle = re.compile('Arc \d+:.+')
-    chapterUrls = [a['href'] for a in parent.find_all('a', href=not_contents)]
+
+    # list of Arc titles, with cleanup for inconsistent tagging
+    for strong in entrycontent.find_all('strong'):
+        strong.unwrap()
+
+    entrycontent.smooth()
+    arctitles = entrycontent.find_all(string=re.compile('Arc \d+:.+'))
+    
+    #still some kinks, some titles aren't part of tags that wrap the whole list of chapters
+    for x in arctitles:     
+        (x, len(x.parent.find_all('a')))
+
+    chapterUrls = [a['href'] for a in entrycontent.find_all('a', href=not_contents)]
     return chapterUrls
 
 
@@ -72,6 +82,15 @@ def parse_worm_chapter(chapterHtml):
         a.decompose()
     return storyParent
 
+def getnextelement(element, counter):
+    print(counter)
+    nextelement = element.next_element
+    if re.match('rc \d+:.+', str(nextelement.get_text())):
+        return
+    print(nextelement)
+    getnextelement(nextelement, counter + 1)
+
+# getnextelement(testelement,0)
 
 def make_you_epub():
     '''
