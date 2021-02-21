@@ -92,6 +92,17 @@ def parse_worm_chapter(chapterHtml):
     storyParent.smooth()
     return storyParent
 
+def get_worm_chapter(chapterUrl):
+    chapterHtml = get_worm_html(chapterUrl)
+    chapterContent = str(parse_worm_chapter(chapterHtml))
+    arcChapter = (chapterUrl, chapterContent)
+    return arcChapter
+
+def get_worm_arc(arcTuple):
+    arcTitle, chapterUrls = arcTuple
+    arcChapters = list(map(get_worm_chapter, chapterUrls))
+    arc = (arcTitle, arcChapters)
+    return arc
 
 def make_you_epub():
     '''
