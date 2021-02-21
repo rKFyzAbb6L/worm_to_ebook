@@ -29,6 +29,14 @@ def not_contents(href):
     return href and not notcontents.search(href)
 
 
+def get_arc_chapter_url(arcTitle):
+    '''
+    get all the chapter URLs for a given a bs4 navigable string Arc's Title 
+    '''
+
+    arcChapterUrls = [x.get('href') for x in arcTitle.parent.find_all('a')]
+    return (str(arcTitle), arcChapterUrls)
+
 def parse_worm_contents(contentsHtml):
     '''
     take html from contents and return a list of dicts with
@@ -58,13 +66,10 @@ def parse_worm_contents(contentsHtml):
         strong.unwrap()
 
     entrycontent.smooth()
-    arctitles = entrycontent.find_all(string=re.compile('Arc \d+:.+'))
-    
-    #still some kinks, some titles aren't part of tags that wrap the whole list of chapters
-    for x in arctitles:     
-        (x, len(x.parent.find_all('a')))
 
-    chapterUrls = [a['href'] for a in entrycontent.find_all('a', href=not_contents)]
+    arcTitles = entrycontent.find_all(string=re.compile('Arc \d+:.+')) 
+    chapterUrls = list(map(get_arc_chapter_url, arcTitles))
+
     return chapterUrls
 
 
@@ -73,24 +78,16 @@ def parse_worm_chapter(chapterHtml):
     take html from worm chapter, and turn just the story portion
     '''
     # story seems to be in <p> tags wrapped in <div class="entry-content">
+    # except where it's not
     soup = BeautifulSoup(chapterHtml, 'lxml')
     storyParent = soup.find('div', 'entry-content')
-    # destructive, but get rid of extra tags that hopefully aren't story text
+    # destructive, but get rid of extra tags that hopefully aren't arc titles
     for div in storyParent.find_all('div', id="jp-post-flair"):
         div.decompose()
     for a in storyParent.find_all('a'):
         a.decompose()
     return storyParent
 
-def getnextelement(element, counter):
-    print(counter)
-    nextelement = element.next_element
-    if re.match('rc \d+:.+', str(nextelement.get_text())):
-        return
-    print(nextelement)
-    getnextelement(nextelement, counter + 1)
-
-# getnextelement(testelement,0)
 
 def make_you_epub():
     '''
