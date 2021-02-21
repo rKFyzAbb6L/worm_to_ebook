@@ -9,9 +9,9 @@ import re
 CONTENTS = 'https://parahumans.wordpress.com/table-of-contents/'
 
 
-# gethtml
-# getshittywordpresscontents
-# parseshittywordpressedhtml
+# gethtml   _DONE
+# getshittywordpresscontents   _DONE
+# parseshittywordpressedhtml   _mostly DONE
 # makeepubcontents
 # makeepubchapter
 
@@ -37,6 +37,11 @@ def get_arc_chapter_url(arcTitle):
     arcChapterUrls = [x.get('href') for x in arcTitle.parent.find_all('a')]
     return (str(arcTitle), arcChapterUrls)
 
+def get_entry_content(html):
+    soup = BeautifulSoup(html, 'lxml')
+    entrycontent = soup.find('div', 'entry-content')
+    return entrycontent
+
 def parse_worm_contents(contentsHtml):
     '''
     take html from contents and return a list of dicts with
@@ -47,9 +52,8 @@ def parse_worm_contents(contentsHtml):
     # actually should get the Arc title as well,
     # then maybe just use tha tas the key to a dict with value list of chapters
 
-    # get main contents html
-    soup = BeautifulSoup(contentsHtml, 'lxml')
-    entrycontent = soup.find('div', 'entry-content')
+    # get main contents
+    contents = get_entry_content(contentsHtml)
 
     # Arc title regex. _usually_ <p><strong>Arc <\br>
 
@@ -62,12 +66,12 @@ def parse_worm_contents(contentsHtml):
     # then finally "reset" to next index from chapter title match, and repeat
 
     # list of Arc titles, with cleanup for inconsistent tagging
-    for strong in entrycontent.find_all('strong'):
+    for strong in contents.find_all('strong'):
         strong.unwrap()
 
-    entrycontent.smooth()
+    contents.smooth()
 
-    arcTitles = entrycontent.find_all(string=re.compile('Arc \d+:.+')) 
+    arcTitles = contents.find_all(string=re.compile(r'Arc \d+:.+'))
     chapterUrls = list(map(get_arc_chapter_url, arcTitles))
 
     return chapterUrls
@@ -79,13 +83,13 @@ def parse_worm_chapter(chapterHtml):
     '''
     # story seems to be in <p> tags wrapped in <div class="entry-content">
     # except where it's not
-    soup = BeautifulSoup(chapterHtml, 'lxml')
-    storyParent = soup.find('div', 'entry-content')
+    storyParent = get_entry_content(chapterHtml)
     # destructive, but get rid of extra tags that hopefully aren't arc titles
     for div in storyParent.find_all('div', id="jp-post-flair"):
         div.decompose()
     for a in storyParent.find_all('a'):
         a.decompose()
+    storyParent.smooth()
     return storyParent
 
 
