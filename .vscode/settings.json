@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "/home/cody/.cache/pypoetry/virtualenvs/worm-to-ebook-Ycp3Lc4--py3.8/bin/python",
+    "python.pythonPath": "/home/cody/.virtualenvs/worm_to_ebook/bin/python",
     "python.linting.pylintEnabled": false,
     "python.linting.flake8Enabled": true,
     "python.linting.enabled": true
