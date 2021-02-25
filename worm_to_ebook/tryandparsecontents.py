@@ -35,7 +35,7 @@ def get_arc_chapter_url(arcTitle):
     '''
 
     arcChapterUrls = [x.get('href') for x in arcTitle.parent.find_all('a')]
-    return (str(arcTitle), arcChapterUrls)
+    return (arcTitle, arcChapterUrls)
 
 def get_entry_content(html):
     soup = BeautifulSoup(html, 'lxml')
@@ -71,7 +71,10 @@ def parse_worm_contents(contentsHtml):
 
     contents.smooth()
 
+    # arcs 5, 6, 7, 8 , 9 , 10 , 11 return bad chapterUrl leist
     arcTitles = contents.find_all(string=re.compile(r'Arc \d+:.+'))
+
+    # we _must_ encodethe URI here, otherwise Unicode character slip through and errors on request
     chapterUrls = list(map(get_arc_chapter_url, arcTitles))
 
     return chapterUrls
@@ -94,7 +97,7 @@ def parse_worm_chapter(chapterHtml):
 
 def get_worm_chapter(chapterUrl):
     chapterHtml = get_worm_html(chapterUrl)
-    chapterContent = str(parse_worm_chapter(chapterHtml))
+    chapterContent = parse_worm_chapter(chapterHtml)
     arcChapter = (chapterUrl, chapterContent)
     return arcChapter
 
@@ -108,6 +111,22 @@ def make_you_epub():
     '''
     epub is html, so just mash it up in there?
     '''
+
+    book = epub.EpubBook()
+    # i guess theres required metadata
+    book.set_identifier('Worm_3fd3da72-fe9c-43ae-8164-5309f2aae20c')
+    book.set_title('Worm')
+    book.set_language('en')
+    book.add_author('John C. "Wildbow" McCrae')
+
+    for arc in arcs:
+        for chapter in arc.chapters:
+            epubChapter = epub.EpubHtml(title=f"{arc.title}: {chapter.num}",
+                                        file_name=f"{arc.title}.html",
+                                        lang='en')
+            epubChapter.set_content(chapter.content)
+            book.add_item(epubChapter)
+
     pass
     # chapters = [worm.parse_worm_chapter(worm.get_worm_html(url)) for url in contents[:5]]
     # for chapter in chapters:

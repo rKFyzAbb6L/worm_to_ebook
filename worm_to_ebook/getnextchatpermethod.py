@@ -68,4 +68,3 @@ def get_book(chapter_url):
 
 if __name__ == '__main__':
     book = get_book('https://parahumans.wordpress.com/2013/10/15/speck-30-1/')
-    print('')
