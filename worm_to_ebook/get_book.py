@@ -43,7 +43,7 @@ def parse_chapter(chapter_url, chapter_html):
         a.decompose()
     entry['content'].smooth()
     chapter_dict = {'chapterTitle': str(entry['title']),
-                    'chapterUrrl': str(chapter_url),
+                    'chapterUrl': str(chapter_url),
                     'chapterContent': entry['content'].prettify(
                                                        formatter='html'),
                     'nextChapter': str(next_chapter),
