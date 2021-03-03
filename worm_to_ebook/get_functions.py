@@ -8,11 +8,15 @@ def get_chapter_html(chapter_url):
     return html
 
 
-def get_next_chapter_link(chapter_html):
+def get_sybling_chapter_link(direction, chapter_html):
     soup = BeautifulSoup(chapter_html, 'lxml')
-    next_chapter = soup.find('a', text='Next Chapter')
-    if next_chapter:
-        return next_chapter.get('href')
+    if direction == 'next':
+        sybling_chapter = soup.find('a', text='Next Chapter')
+    elif direction == 'prev':
+        sybling_chapter = soup.find('a', text='Last Chapter')
+
+    if sybling_chapter:
+        return sybling_chapter.get('href')
     else:
         return None
 
@@ -34,8 +38,8 @@ def parse_entry_content(html):
 
 
 def parse_chapter(chapter_url, chapter_html):
-    next_chapter = get_next_chapter_link(chapter_html)
-    prev_chapter = get_last_chapter_link(chapter_html)
+    next_chapter = get_sybling_chapter_link('next', chapter_html)
+    prev_chapter = get_sybling_chapter_link('prev', chapter_html)
     entry = parse_entry_content(chapter_html)
     for div in entry['content'].find_all('div', id="jp-post-flair"):
         div.decompose()
