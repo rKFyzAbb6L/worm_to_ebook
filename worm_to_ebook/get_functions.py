@@ -14,7 +14,8 @@ def get_sybling_chapter_link(direction, chapter_html):
         sybling_chapter = soup.find('a', text='Next Chapter')
     elif direction == 'prev':
         sybling_chapter = soup.find('a', text='Last Chapter')
-
+    else:
+        sybling_chapter = None
     if sybling_chapter:
         return sybling_chapter.get('href')
     else:
@@ -48,8 +49,7 @@ def parse_chapter(chapter_url, chapter_html):
     entry['content'].smooth()
     chapter_dict = {'chapterTitle': str(entry['title']),
                     'chapterUrl': str(chapter_url),
-                    'chapterContent': entry['content'].prettify(
-                                                       formatter='html'),
+                    'chapterContent': entry['content'].encode(),
                     'nextChapter': str(next_chapter),
                     'prevChapter': str(prev_chapter)}
     return chapter_dict

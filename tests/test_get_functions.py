@@ -84,8 +84,7 @@ def test_parse_chapter():
     expected = {
         'chapterTitle': 'Arc 47',
         'chapterUrl': 'http://fake.test',
-        'chapterContent': good_soup.find('div', 'entry-content').prettify(
-                        formatter='html'),
+        'chapterContent': good_soup.find('div', 'entry-content').encode(),
         'nextChapter': 'https://next.test',
         'prevChapter': 'https://prev.test'
     }
@@ -98,8 +97,7 @@ def test_get_chapter(monkeypatch):
     expected = {
         'chapterTitle': 'Arc 47',
         'chapterUrl': 'http://fake.test',
-        'chapterContent': good_soup.find('div', 'entry-content').prettify(
-                        formatter='html'),
+        'chapterContent': good_soup.find('div', 'entry-content').encode(),
         'nextChapter': 'https://next.test',
         'prevChapter': 'https://prev.test'
     }
