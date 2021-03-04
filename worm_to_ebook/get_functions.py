@@ -22,15 +22,6 @@ def get_sybling_chapter_link(direction, chapter_html):
         return None
 
 
-def get_last_chapter_link(chapter_html):
-    soup = BeautifulSoup(chapter_html, 'lxml')
-    last_chapter = soup.find('a', text='Last Chapter')
-    if last_chapter:
-        return last_chapter.get('href')
-    else:
-        return None
-
-
 def parse_entry_content(html):
     soup = BeautifulSoup(html, 'lxml')
     entry = {'title': soup.find(class_='entry-title').text,
