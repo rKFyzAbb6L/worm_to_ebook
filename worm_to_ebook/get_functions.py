@@ -1,4 +1,5 @@
 import requests
+import re
 from bs4 import BeautifulSoup
 
 
@@ -9,11 +10,13 @@ def get_chapter_html(chapter_url):
 
 
 def get_sybling_chapter_link(direction, chapter_html):
+    # not all chapters match "Next Chapter" perfectly
+    # so using a regex search
     soup = BeautifulSoup(chapter_html, 'lxml')
     if direction == 'next':
-        sybling_chapter = soup.find('a', text='Next Chapter')
+        sybling_chapter = soup.find('a', string=re.compile('Next Chapter'))
     elif direction == 'prev':
-        sybling_chapter = soup.find('a', text='Last Chapter')
+        sybling_chapter = soup.find('a', string=re.compile('Last Chapter'))
     else:
         sybling_chapter = None
     if sybling_chapter:
