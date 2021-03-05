@@ -2,7 +2,7 @@ import pytest
 import requests
 
 from worm_to_ebook import __version__
-from worm_to_ebook.get_functions import (get_book,
+from worm_to_ebook.webserial_utils import (get_book,
                                          get_chapter_html,
                                          get_sybling_chapter_link,
                                          parse_entry_content,
@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 
 
 def test_version():
-    assert __version__ == '0.2.0'
+    assert __version__ == '0.3.0'
 
 
 BAD_HTML = b'<body><a href=https://fake.test>FakeLink<a></body>'
@@ -102,7 +102,7 @@ def test_get_chapter(monkeypatch):
         'prevChapter': 'https://prev.test'
     }
     monkeypatch.setattr(
-        'worm_to_ebook.get_functions.get_chapter_html', lambda x: GOOD_HTML)
+        'worm_to_ebook.webserial_utils.get_chapter_html', lambda x: GOOD_HTML)
     result = get_chapter('http://fake.test')
     assert expected == result
 
@@ -142,6 +142,6 @@ def test_get_book(monkeypatch):
         'prevChapter': 'https://prev.test'
     }]
     monkeypatch.setattr(
-        'worm_to_ebook.get_functions.get_chapter', mock_get_chapter)
+        'worm_to_ebook.webserial_utils.get_chapter', mock_get_chapter)
     result = get_book('http://fake.test')
     assert expected == result

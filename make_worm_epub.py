@@ -1,5 +1,5 @@
-from worm_to_ebook.get_functions import get_book
-from worm_to_ebook.make_ebook import make_epub
+from worm_to_ebook.webserial_utils import get_book
+from worm_to_ebook.epub_utils import make_epub
 from ebooklib import epub
 
 
