@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 
 
 def test_version():
-    assert __version__ == '0.1.0'
+    assert __version__ == '0.2.0'
 
 
 BAD_HTML = b'<body><a href=https://fake.test>FakeLink<a></body>'

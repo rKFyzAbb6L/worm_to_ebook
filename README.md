@@ -1,7 +1,10 @@
 # worm-to-ebook
 
-download John C. "Wildbow" McCrae and generate an epub
+download John C. "Wildbow" McCrae's worm and generate an epub
 
 ```
-make_worm_book.py ~/worm.epub
+python make_worm_epub.py
 ```
+
+
+still hard-coded to Worm, but Wildbow's other web serials appear to be formatted similarly, so should be able to get those added as options without too much more work.

@@ -67,11 +67,3 @@ def get_book(chapter_url):
     if 'None' == chapter['nextChapter']:
         return [chapter]
     return [chapter] + get_book(chapter['nextChapter'])
-
-
-if __name__ == "__main__":
-    import json
-    book = get_book('https://parahumans.wordpress.com' +
-                    '/category/stories-arcs-1-10/arc-1-gestation/1-01/')
-    with open('worm.json', 'w') as f:
-        json.dump({'book': book}, f)
