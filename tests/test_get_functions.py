@@ -55,7 +55,7 @@ def test_get_next_chapter_link():
     bad_soup, good_soup = get_soup()
     bad_result = get_sybling_chapter_link('next', BAD_HTML)
     good_result = get_sybling_chapter_link('next', GOOD_HTML)
-    assert bad_result == None
+    assert bad_result is None
     assert good_result == good_soup.find('a', text='Next Chapter').get('href')
 
 
@@ -63,7 +63,7 @@ def test_get_prev_chapter_link():
     bad_soup, good_soup = get_soup()
     bad_result = get_sybling_chapter_link('prev', BAD_HTML)
     good_result = get_sybling_chapter_link('prev', GOOD_HTML)
-    assert bad_result == None
+    assert bad_result is None
     assert good_result == good_soup.find('a', text='Last Chapter').get('href')
 
 
@@ -84,7 +84,7 @@ def test_parse_chapter():
     expected = {
         'chapterTitle': 'Arc 47',
         'chapterUrl': 'http://fake.test',
-        'chapterContent': good_soup.find('div', 'entry-content').encode(),
+        'chapterContent': str(good_soup.find('div', 'entry-content')),
         'nextChapter': 'https://next.test',
         'prevChapter': 'https://prev.test'
     }
@@ -97,7 +97,7 @@ def test_get_chapter(monkeypatch):
     expected = {
         'chapterTitle': 'Arc 47',
         'chapterUrl': 'http://fake.test',
-        'chapterContent': good_soup.find('div', 'entry-content').encode(),
+        'chapterContent': str(good_soup.find('div', 'entry-content')),
         'nextChapter': 'https://next.test',
         'prevChapter': 'https://prev.test'
     }
@@ -133,7 +133,7 @@ def test_get_book(monkeypatch):
         'chapterContent': 'fake',
         'nextChapter': 'https://next.test',
         'prevChapter': 'https://prev.test'
-        },
+    },
         {
         'chapterTitle': 'Arc 48',
         'chapterUrl': 'http://fake.test',

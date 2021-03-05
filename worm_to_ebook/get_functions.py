@@ -1,5 +1,6 @@
 import requests
 import re
+import unicodedata
 from bs4 import BeautifulSoup
 
 
@@ -27,9 +28,13 @@ def get_sybling_chapter_link(direction, chapter_html):
 
 def parse_entry_content(html):
     soup = BeautifulSoup(html, 'lxml')
-    entry = {'title': soup.find(class_='entry-title').text,
+    entry = {'title': soup.find(class_='entry-title').string,
              'content': soup.find('div', 'entry-content')}
     return entry
+
+
+def utf_normalize_nfkd(unicodestr):
+    return unicodedata.normalize('NFKD', unicodestr)
 
 
 def parse_chapter(chapter_url, chapter_html):
@@ -41,9 +46,11 @@ def parse_chapter(chapter_url, chapter_html):
     for a in entry['content'].find_all('a'):
         a.decompose()
     entry['content'].smooth()
-    chapter_dict = {'chapterTitle': str(entry['title']),
-                    'chapterUrl': str(chapter_url),
-                    'chapterContent': entry['content'].encode(),
+    chapter_title = utf_normalize_nfkd(str(entry['title']))
+    chapter_content = utf_normalize_nfkd(str(entry['content']))
+    chapter_dict = {'chapterTitle': chapter_title,
+                    'chapterUrl': chapter_url,
+                    'chapterContent': chapter_content,
                     'nextChapter': str(next_chapter),
                     'prevChapter': str(prev_chapter)}
     return chapter_dict
