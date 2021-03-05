@@ -1,6 +1,8 @@
 # worm-to-ebook
 
-download John C. "Wildbow" McCrae's worm and generate an epub
+download [John C. "Wildbow" McCrae's worm](https://parahumans.wordpress.com/table-of-contents/) and generate an epub
+
+
 
 ```
 python make_worm_epub.py
