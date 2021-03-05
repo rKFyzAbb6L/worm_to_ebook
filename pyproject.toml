@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "worm_to_ebook"
-version = "0.1.0"
+version = "0.2.0"
 description = ""
 authors = ["icb <ian.cody.burnet@gmail.com>"]
 
