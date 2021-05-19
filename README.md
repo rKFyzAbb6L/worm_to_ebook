@@ -5,6 +5,7 @@ download [John C. "Wildbow" McCrae's worm](https://parahumans.wordpress.com/tabl
 
 
 ```
+pip install -r requirements.txt
 python make_worm_epub.py
 ```
 
